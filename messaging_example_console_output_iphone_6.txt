@@ -1,0 +1,23 @@
+2017-04-25 11:31:01.025255-0400 Firebase Prototype[1955:337335] [Firebase/Messaging][I-IID001001] FIRInstanceID AppDelegate proxy enabled, will swizzle app delegate remote notification handlers. To disable add "FirebaseAppDelegateProxyEnabled" to your Info.plist and set it to NO
+2017-04-25 11:31:01.025 Firebase Prototype[1955] <Notice> [Firebase/Messaging][I-IID001001] FIRInstanceID AppDelegate proxy enabled, will swizzle app delegate remote notification handlers. To disable add "FirebaseAppDelegateProxyEnabled" to your Info.plist and set it to NO
+2017-04-25 11:31:01.079859-0400 Firebase Prototype[1955:337335] [Firebase/Messaging][I-FCM001000] FIRMessaging Remote Notifications proxy enabled, will swizzle remote notification receiver handlers. Add "FirebaseAppDelegateProxyEnabled" to your Info.plist and set it to NO
+2017-04-25 11:31:01.080 Firebase Prototype[1955] <Notice> [Firebase/Messaging][I-FCM001000] FIRMessaging Remote Notifications proxy enabled, will swizzle remote notification receiver handlers. Add "FirebaseAppDelegateProxyEnabled" to your Info.plist and set it to NO
+
+
+APNs token retrieved: 32 bytes
+2017-04-25 11:31:01.528628-0400 Firebase Prototype[1955:337335] [Firebase/Analytics][I-ACS023007] Firebase Analytics v.3800000 started
+2017-04-25 11:31:01.592 Firebase Prototype[1955] <Notice> [Firebase/Analytics][I-ACS023007] Firebase Analytics v.3800000 started
+2017-04-25 11:31:01.592811-0400 Firebase Prototype[1955:337335] [Firebase/Analytics][I-ACS023008] To enable debug logging set the following application argument: -FIRAnalyticsDebugEnabled (see http://goo.gl/RfcP7r)
+2017-04-25 11:31:01.593 Firebase Prototype[1955] <Notice> [Firebase/Analytics][I-ACS023008] To enable debug logging set the following application argument: -FIRAnalyticsDebugEnabled (see http://goo.gl/RfcP7r)
+2017-04-25 11:31:01.593761-0400 Firebase Prototype[1955:337335] [Firebase/Analytics][I-ACS003007] Successfully created Firebase Analytics App Delegate Proxy automatically. To disable the proxy, set the flag FirebaseAppDelegateProxyEnabled to NO in the Info.plist
+2017-04-25 11:31:01.594 Firebase Prototype[1955] <Notice> [Firebase/Analytics][I-ACS003007] Successfully created Firebase Analytics App Delegate Proxy automatically. To disable the proxy, set the flag FirebaseAppDelegateProxyEnabled to NO in the Info.plist
+2017-04-25 11:31:03.810151-0400 Firebase Prototype[1955:337337] [MC] System group container for systemgroup.com.apple.configurationprofiles path is /private/var/containers/Shared/SystemGroup/systemgroup.com.apple.configurationprofiles
+2017-04-25 11:31:03.814859-0400 Firebase Prototype[1955:337337] [MC] Reading from public effective user settings.
+2017-04-25 11:31:03.950900-0400 Firebase Prototype[1955:337337] [Firebase/Analytics][I-ACS023012] Firebase Analytics enabled
+2017-04-25 11:31:03.951 Firebase Prototype[1955] <Notice> [Firebase/Analytics][I-ACS023012] Firebase Analytics enabled
+APNs token retrieved: 32 bytes
+
+This is what we will need to store in the database:
+
+InstanceID token: c0_N1zKfFdM:APA91bGUvD0qnBQ9hf4NtJHkuWBBvzHM3mYddRunvGOwgdCLEu0h3EQJF_f9mND7WkxUBR78WC1-8GH1cgrCdjDIt8BzHu9qx7_FLiQSpSvwfzxXfsqaeiqh3r7y30IVwRP5ic8fjg-t
+Disconnected from FCM.

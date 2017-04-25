@@ -1,0 +1,5 @@
+.bundle/
+CertificateSigningRequest.certSigningRequest
+GoogleService-Info.plist
+*.cer
+*.p12
