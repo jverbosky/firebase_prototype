@@ -14,8 +14,8 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    // var refreshedToken:String?
     let gcmMessageIDKey = "gcm.message_id"
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -90,11 +90,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     // [END receive_message]
 
+    // [START post_firebase_data]
+    func postData(_ refreshedToken:String) {
+        var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
+        // let email = "mentor@ios_app.com"
+        // let email = "mig@ghi.com"  // test update email with no Firebase token
+        let email = "jv-phone@test.com"  // test from JV iPhone
+        
+        // test for POST of actual Firebase token from iOS device
+        let fcm_id = refreshedToken
+        
+        // test for db record insert (no matching email)
+        // let fcm_id = "b1_D2qKfFdM:APA91bGUvD0qnBQ9hf4NtJHkuWBBvzHM3mYddRunvGOwgdCLEu0h3EQJF_f9mND7WkxUBR76WC1-8GH1cgrCdjDIt7BzHu9qx7_FLiQSpSvwfzxXfsqaeiqh3r7y30IVwRP5ic8fjg-y"
+        
+        // test for db record update (match on email)
+        // let fcm_id = "k7_J3mLuQaC:SYH72aIMsA9blZX7hf4NtJHkuWBBvzHM3mYddRunvGOwgdCLEu0h3EQJF_f9mND7WkxUBR76WC1-8GH1cgrCdjDIt7BzHu9qx7_FLiQSpSvwfzxXfsqaeiqh3r7y30IVwRP5ic8fjg-y"
+        
+        let postString = "email=\(email)&fcm_id=\(String(describing: fcm_id))"
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(String(describing: responseString))")
+        }
+        task.resume()
+    }
+    // [END post_firebase_data]
+    
     // [START refresh_token]
     func tokenRefreshNotification(_ notification: Notification) {
-        if let refreshedToken = FIRInstanceID.instanceID().token() {
+         if let refreshedToken = FIRInstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
-        }
+            
+            // Post data to Sinatra app after Firebase token is acquired
+            postData(refreshedToken)
+         }
+        
+        // self.refreshedToken = FIRInstanceID.instanceID().token()!
         
         // Connect to FCM since connection may have failed when attempted before having a token.
         connectToFcm()

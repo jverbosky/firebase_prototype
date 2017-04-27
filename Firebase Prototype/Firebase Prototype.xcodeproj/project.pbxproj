@@ -356,6 +356,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Firebase Prototype/Firebase Prototype.entitlements";
 				DEVELOPMENT_TEAM = S3725VKX58;
 				INFOPLIST_FILE = "Firebase Prototype/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.minedminds.Firebase-Prototype";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -371,6 +372,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Firebase Prototype/Firebase Prototype.entitlements";
 				DEVELOPMENT_TEAM = S3725VKX58;
 				INFOPLIST_FILE = "Firebase Prototype/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.minedminds.Firebase-Prototype";
 				PRODUCT_NAME = "$(TARGET_NAME)";
