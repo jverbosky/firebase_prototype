@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
         // let email = "mentor@ios_app.com"
         // let email = "mig@ghi.com"  // test update email with no Firebase token
-        let email = "jv-phone@test.com"  // test from JV iPhone
+        let email = "jv-ipad@test.com"  // test from JV iPhone
         
         // test for POST of actual Firebase token from iOS device
         let fcm_id = refreshedToken
