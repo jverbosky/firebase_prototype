@@ -18,13 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.message_id"
     let dataPlistName = "Login"
     let fcmIdKey = "fcmId"  // plist fcmId key
-    var fcmIDValue:String = ""
+    var fcmIDValue:String = ""  // fcmId value to save to plist
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        // Register for remote notifications. This shows a permission dialog on first run, to
-        // show the dialog at a more appropriate time move this registration accordingly.
-        // [START register_for_notifications]
+        // Show a permission dialog on first run to register for push notifications
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -45,17 +43,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         
-        // [END register_for_notifications]
-        
+        // Configures a default Firebase app, raises an exception if any configuration step fails
         FIRApp.configure()
         
-        // [START add_token_refresh_observer]
         // Add observer for InstanceID token refresh callback.
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.tokenRefreshNotification),
                                                name: .firInstanceIDTokenRefresh,
                                                object: nil)
-        // [END add_token_refresh_observer]
         
         // Initialize plist if present, otherwise copy over Login.plist file into app's Documents directory
         SwiftyPlistManager.shared.start(plistNames: [dataPlistName], logging: false)
@@ -63,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    // [START receive_message]
+    // Function to handle receipt of push notification from Firebase
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
@@ -78,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(userInfo)
     }
     
+    // Function to handle receipt of push notification from Firebase with completion handler
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         // If you are receiving a notification message while your app is in the background,
@@ -94,63 +90,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         completionHandler(UIBackgroundFetchResult.newData)
     }
-    // [END receive_message]
 
-    
-//    // [START post_firebase_data]
-////    func postData(_ refreshedToken:String) {
-//    func postData(_ email:String) {
-//        var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
-//        // let email = "mentor@ios_app.com"
-//        // let email = "mig@ghi.com"  // test update email with no Firebase token
-//        // let email = "jv-iphone@test.com"  // test from JV iPhone
-//        
-//        // test for POST of actual Firebase token from iOS device
-//        // let fcmId = refreshedToken
-//
-//        let postString = "email=\(email)&fcm_id=\(String(describing: fcmId))"
-//        request.httpMethod = "POST"
-//        request.httpBody = postString.data(using: .utf8)
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-//                print("error=\(String(describing: error))")
-//                return
-//            }
-//            
-//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(String(describing: response))")
-//            }
-//            
-//            let responseString = String(data: data, encoding: .utf8)
-//            print("responseString = \(String(describing: responseString))")
-//        }
-//        task.resume()
-//    }
-//    // [END post_firebase_data]
-    
-    // [START refresh_token]
+    // Function to retrieve Firebase token and call evaluatePlist function
     func tokenRefreshNotification(_ notification: Notification) {
          if let refreshedToken = FIRInstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
-            
-            // Post data to Sinatra app after Firebase token is acquired
-            // postData(refreshedToken)
-            
-            // fcmId = refreshedToken
             evaluatePlist(refreshedToken)
-            
-            // postData()
          }
-        
-        // self.refreshedToken = FIRInstanceID.instanceID().token()!
         
         // Connect to FCM since connection may have failed when attempted before having a token.
         connectToFcm()
     }
-    // [END refresh_token]
     
-    // [START connect_to_fcm]
+    // Function to connect to Firebase
     func connectToFcm() {
         // Won't connect since there is no token
         guard FIRInstanceID.instanceID().token() != nil else {
@@ -168,7 +120,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    // [END connect_to_fcm]
     
     // Function to determine if plist is already populated
     func evaluatePlist(_ fcmIdValue:String) {
@@ -201,54 +152,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    // Function to trap errors during remote notification registration
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Unable to register for remote notifications: \(error.localizedDescription)")
     }
     
-    // This function is added here only for debugging purposes, and can be removed if swizzling is enabled.
-    // If swizzling is disabled then this function must be implemented so that the APNs token can be paired to
-    // the InstanceID token.
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("APNs token retrieved: \(deviceToken)")
-        
-        // With swizzling disabled you must set the APNs token here.
-        // FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.sandbox)
-    }
-
-    // [START connect_on_active]
+    // Function to connect to Firebase when app becomes active after being paused
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         connectToFcm()
     }
-    // [END connect_on_active]
 
-    // [START disconnect_from_fcm]
+    // Function to disconnect from Firebase
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         FIRMessaging.messaging().disconnect()
         print("Disconnected from FCM.")
     }
-    // [END disconnect_from_fcm]
     
-    // Template code
+    // Xcode template function
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
 
+    // Xcode template function
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
-  
 
+    // Xcode template function
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
 }
 
-// [START ios_10_message_handling]
+// iOS 10 message handling
 @available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
@@ -284,16 +224,14 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         completionHandler()
     }
 }
-// [END ios_10_message_handling]
 
-// [START ios_10_data_message_handling]
+// iOS 10 data message handling
 extension AppDelegate : FIRMessagingDelegate {
     // Receive data message on iOS 10 devices while app is in the foreground.
     func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
         print(remoteMessage.appData)
     }
 }
-// [END ios_10_data_message_handling]
 
 
 

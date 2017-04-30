@@ -11,11 +11,11 @@ import SwiftyPlistManager
 
 class ViewController: UIViewController {
 
-    // let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let dataPlistName = "Login"
     let usernameKey = "username"  // plist username key
-    var usernameValue:String = ""
-    var fcmIdValue:String = ""
+    var usernameValue:String = ""  // plist username value to post to Sinatra app
+    let fcmIdKey = "fcmId"  // plist fcmId key
+    var fcmIdValue:String = ""  // plist fcmID value to post to Sinatra app
     
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var statusUpdate: UILabel!
@@ -26,9 +26,6 @@ class ViewController: UIViewController {
     // Initialize plist if present, otherwise copy over Login.plist file into app's Documents directory
     SwiftyPlistManager.shared.start(plistNames: [dataPlistName], logging: false)
         
-    // Output plist value for username
-    // readPlist(usernameKey)
-        
     }
 
     // Function to collect username from input field
@@ -36,6 +33,7 @@ class ViewController: UIViewController {
         
         if inputField.text != "" {
             evaluatePlist(inputField.text!)
+            postData()
             statusUpdate.text = "Thank you \(inputField.text!)!"
         } else {
             statusUpdate.text = "Username not detected - please try again!"
@@ -83,9 +81,8 @@ class ViewController: UIViewController {
                     print("-------------> The Value for Key '\(key)' does not exists.")
                     return
                 }
-                // print("-------------> The Value for Key '\(key)' actually exists. It is: '\(result)'")
-                usernameValue = result as! String
                 print("------------> The value for the fcmIdValue variable is \(usernameValue).")
+                usernameValue = result as! String
             } else {
                 print("No key in there!")
             }
@@ -113,12 +110,14 @@ class ViewController: UIViewController {
 
     // Function to post email and Firebase token to Sinatra app
     func postData() {
+
         var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
+        
+        readPlistEmail(usernameKey)  // update usernameValue with plist value
+        readPlistFcm(fcmIdKey)  // update fcmIdValue with plist value
         
         let email = usernameValue
         let fcmID = fcmIdValue
-        
-        // let email = "jv-iphone@test.com"  // test from JV iPhone
         
         let postString = "email=\(email)&fcm_id=\(String(describing: fcmID))"
         request.httpMethod = "POST"
