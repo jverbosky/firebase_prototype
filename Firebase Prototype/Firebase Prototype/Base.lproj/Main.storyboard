@@ -6,13 +6,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Firebase_Prototype" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="plist_prototype" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -21,22 +22,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aph-EL-mpm">
-                                <rect key="frame" x="159" y="323" width="57" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXb-CD-xnB">
+                                <rect key="frame" x="96" y="280" width="183" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="eBh-oT-maS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
+                                <state key="normal" title="Submit"/>
+                                <connections>
+                                    <action selector="submitButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bL7-Nf-hzc"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4dh-g6-Jcs">
+                                <rect key="frame" x="76" y="200" width="223" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="WrA-Zu-I7W"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter your Mined Minds Mentoring username and press Submit." lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jtw-ua-5CY">
+                                <rect key="frame" x="71" y="80" width="233" height="89.5"/>
+                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kns-dP-BkV">
+                                <rect key="frame" x="30" y="370" width="315" height="0.0"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="aph-EL-mpm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2xx-z9-NGh"/>
-                            <constraint firstItem="aph-EL-mpm" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vWq-79-XGz"/>
+                            <constraint firstItem="kXb-CD-xnB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="80" id="2pW-O8-k4Y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kXb-CD-xnB" secondAttribute="trailing" constant="80" id="44E-2b-KlS"/>
+                            <constraint firstItem="kXb-CD-xnB" firstAttribute="top" secondItem="4dh-g6-Jcs" secondAttribute="bottom" constant="40" id="4hK-7J-df0"/>
+                            <constraint firstItem="Jtw-ua-5CY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="55" id="6rD-5p-WD0"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4dh-g6-Jcs" secondAttribute="trailing" constant="60" id="ANZ-o2-7lL"/>
+                            <constraint firstItem="Jtw-ua-5CY" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="60" id="F3D-D8-Rej"/>
+                            <constraint firstItem="4dh-g6-Jcs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="60" id="FGJ-T9-LCR"/>
+                            <constraint firstItem="Jtw-ua-5CY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OBa-Ra-U7N"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Jtw-ua-5CY" secondAttribute="trailing" constant="55" id="ZNV-j4-aHd"/>
+                            <constraint firstItem="Kns-dP-BkV" firstAttribute="top" secondItem="kXb-CD-xnB" secondAttribute="bottom" constant="60" id="Zo7-Zs-WzA"/>
+                            <constraint firstItem="4dh-g6-Jcs" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="180" id="eyE-Tr-OtN"/>
+                            <constraint firstAttribute="trailing" secondItem="Kns-dP-BkV" secondAttribute="trailing" constant="30" id="ivH-Nq-xut"/>
+                            <constraint firstItem="Kns-dP-BkV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="nSZ-GG-9SY"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="inputField" destination="4dh-g6-Jcs" id="XEc-6K-KMg"/>
+                        <outlet property="statusUpdate" destination="Kns-dP-BkV" id="PHZ-75-uWQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="117.59999999999999" y="122.78860569715144"/>
         </scene>
     </scenes>
 </document>

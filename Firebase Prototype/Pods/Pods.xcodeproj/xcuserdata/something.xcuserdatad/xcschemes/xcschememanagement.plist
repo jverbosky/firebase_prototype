@@ -19,20 +19,30 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftyPlistManager.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>03E38FCA7F4282405B0385F5C4064E64</key>
+		<key>2D9FD16DE009B9FFFB5463802312F8C5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>594E0ABD4519F0302A3E595CB4305560</key>
+		<key>53DDDA4FB5BBFE36FA7365762F547B8D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>C5B80060FE8C664DF08841000F41D515</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EBCC414F35659281050EA325E7A1BEE9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

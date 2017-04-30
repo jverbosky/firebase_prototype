@@ -14,6 +14,7 @@
 		B227A9811EAF96B800F03C6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B227A9801EAF96B800F03C6F /* Assets.xcassets */; };
 		B227A9841EAF96B800F03C6F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B227A9821EAF96B800F03C6F /* LaunchScreen.storyboard */; };
 		B227A98D1EAF98B300F03C6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B227A98C1EAF98B300F03C6F /* GoogleService-Info.plist */; };
+		B23BE0F11EB66F2A0032A2F5 /* Login.plist in Resources */ = {isa = PBXBuildFile; fileRef = B23BE0F01EB66F2A0032A2F5 /* Login.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		B227A9851EAF96B800F03C6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B227A98B1EAF96C700F03C6F /* Firebase Prototype.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firebase Prototype.entitlements"; sourceTree = "<group>"; };
 		B227A98C1EAF98B300F03C6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B23BE0F01EB66F2A0032A2F5 /* Login.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Login.plist; sourceTree = "<group>"; };
 		B9E25D6E067AEB2FD906FB28 /* Pods-Firebase Prototype.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Firebase Prototype.release.xcconfig"; path = "Pods/Target Support Files/Pods-Firebase Prototype/Pods-Firebase Prototype.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +90,7 @@
 				B227A9801EAF96B800F03C6F /* Assets.xcassets */,
 				B227A9821EAF96B800F03C6F /* LaunchScreen.storyboard */,
 				B227A9851EAF96B800F03C6F /* Info.plist */,
+				B23BE0F01EB66F2A0032A2F5 /* Login.plist */,
 				B227A98C1EAF98B300F03C6F /* GoogleService-Info.plist */,
 			);
 			path = "Firebase Prototype";
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B227A9841EAF96B800F03C6F /* LaunchScreen.storyboard in Resources */,
+				B23BE0F11EB66F2A0032A2F5 /* Login.plist in Resources */,
 				B227A98D1EAF98B300F03C6F /* GoogleService-Info.plist in Resources */,
 				B227A9811EAF96B800F03C6F /* Assets.xcassets in Resources */,
 				B227A97F1EAF96B800F03C6F /* Main.storyboard in Resources */,
@@ -356,7 +360,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Firebase Prototype/Firebase Prototype.entitlements";
 				DEVELOPMENT_TEAM = S3725VKX58;
 				INFOPLIST_FILE = "Firebase Prototype/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.minedminds.Firebase-Prototype";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -372,7 +376,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Firebase Prototype/Firebase Prototype.entitlements";
 				DEVELOPMENT_TEAM = S3725VKX58;
 				INFOPLIST_FILE = "Firebase Prototype/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.minedminds.Firebase-Prototype";
 				PRODUCT_NAME = "$(TARGET_NAME)";
