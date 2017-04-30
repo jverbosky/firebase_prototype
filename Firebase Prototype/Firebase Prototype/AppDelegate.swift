@@ -9,16 +9,19 @@
 import UIKit
 import UserNotifications
 import Firebase
+import SwiftyPlistManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    // var refreshedToken:String?
     let gcmMessageIDKey = "gcm.message_id"
-
+    let dataPlistName = "Login"
+    let fcmIdKey = "fcmId"  // plist fcmId key
+    var fcmIDValue:String = ""
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
+        
         // Register for remote notifications. This shows a permission dialog on first run, to
         // show the dialog at a more appropriate time move this registration accordingly.
         // [START register_for_notifications]
@@ -53,6 +56,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                name: .firInstanceIDTokenRefresh,
                                                object: nil)
         // [END add_token_refresh_observer]
+        
+        // Initialize plist if present, otherwise copy over Login.plist file into app's Documents directory
+        SwiftyPlistManager.shared.start(plistNames: [dataPlistName], logging: false)
         
         return true
     }
@@ -90,42 +96,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     // [END receive_message]
 
-    // [START post_firebase_data]
-    func postData(_ refreshedToken:String) {
-        var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
-        // let email = "mentor@ios_app.com"
-        // let email = "mig@ghi.com"  // test update email with no Firebase token
-        let email = "jv-iphone@test.com"  // test from JV iPhone
-        
-        // test for POST of actual Firebase token from iOS device
-        let fcm_id = refreshedToken
-        
-        // test for db record insert (no matching email)
-        // let fcm_id = "b1_D2qKfFdM:APA91bGUvD0qnBQ9hf4NtJHkuWBBvzHM3mYddRunvGOwgdCLEu0h3EQJF_f9mND7WkxUBR76WC1-8GH1cgrCdjDIt7BzHu9qx7_FLiQSpSvwfzxXfsqaeiqh3r7y30IVwRP5ic8fjg-y"
-        
-        // test for db record update (match on email)
-        // let fcm_id = "k7_J3mLuQaC:SYH72aIMsA9blZX7hf4NtJHkuWBBvzHM3mYddRunvGOwgdCLEu0h3EQJF_f9mND7WkxUBR76WC1-8GH1cgrCdjDIt7BzHu9qx7_FLiQSpSvwfzxXfsqaeiqh3r7y30IVwRP5ic8fjg-y"
-        
-        let postString = "email=\(email)&fcm_id=\(String(describing: fcm_id))"
-        request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(String(describing: error))")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(String(describing: response))")
-            }
-            
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(String(describing: responseString))")
-        }
-        task.resume()
-    }
-    // [END post_firebase_data]
+    
+//    // [START post_firebase_data]
+////    func postData(_ refreshedToken:String) {
+//    func postData(_ email:String) {
+//        var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
+//        // let email = "mentor@ios_app.com"
+//        // let email = "mig@ghi.com"  // test update email with no Firebase token
+//        // let email = "jv-iphone@test.com"  // test from JV iPhone
+//        
+//        // test for POST of actual Firebase token from iOS device
+//        // let fcmId = refreshedToken
+//
+//        let postString = "email=\(email)&fcm_id=\(String(describing: fcmId))"
+//        request.httpMethod = "POST"
+//        request.httpBody = postString.data(using: .utf8)
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+//                print("error=\(String(describing: error))")
+//                return
+//            }
+//            
+//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+//                print("response = \(String(describing: response))")
+//            }
+//            
+//            let responseString = String(data: data, encoding: .utf8)
+//            print("responseString = \(String(describing: responseString))")
+//        }
+//        task.resume()
+//    }
+//    // [END post_firebase_data]
     
     // [START refresh_token]
     func tokenRefreshNotification(_ notification: Notification) {
@@ -133,7 +135,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("InstanceID token: \(refreshedToken)")
             
             // Post data to Sinatra app after Firebase token is acquired
-            postData(refreshedToken)
+            // postData(refreshedToken)
+            
+            // fcmId = refreshedToken
+            evaluatePlist(refreshedToken)
+            
+            // postData()
          }
         
         // self.refreshedToken = FIRInstanceID.instanceID().token()!
@@ -162,6 +169,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     // [END connect_to_fcm]
+    
+    // Function to determine if plist is already populated
+    func evaluatePlist(_ fcmIdValue:String) {
+        
+        // Run function to add key/value pairs if plist empty, otherwise run function to update values
+        SwiftyPlistManager.shared.getValue(for: fcmIdKey, fromPlistWithName: dataPlistName) { (result, err) in
+            if err != nil {
+                populatePlist(fcmIdKey, fcmIdValue)
+            } else {
+                updatePlist(fcmIdKey, fcmIdValue)
+            }
+        }
+    }
+    
+    // Function to populate empty plist file with specified key/value pair
+    func populatePlist(_ key:String, _ value:String) {
+        SwiftyPlistManager.shared.addNew(value, key: key, toPlistWithName: dataPlistName) { (err) in
+            if err == nil {
+                print("-------------> Value '\(value)' successfully added at Key '\(key)' into '\(dataPlistName).plist'")
+            }
+        }
+    }
+    
+    // Function to update specified key/value pair in plist file
+    func updatePlist(_ key:String, _ value:String) {
+        SwiftyPlistManager.shared.save(value, forKey: key, toPlistWithName: dataPlistName) { (err) in
+            if err == nil {
+                print("------------------->  Value '\(value)' successfully saved at Key '\(key)' into '\(dataPlistName).plist'")
+            }
+        }
+    }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Unable to register for remote notifications: \(error.localizedDescription)")

@@ -11,12 +11,14 @@ import SwiftyPlistManager
 
 class ViewController: UIViewController {
 
+    // let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let dataPlistName = "Login"
     let usernameKey = "username"  // plist username key
+    var usernameValue:String = ""
+    var fcmIdValue:String = ""
     
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var statusUpdate: UILabel!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +41,6 @@ class ViewController: UIViewController {
             statusUpdate.text = "Username not detected - please try again!"
         }
     }
-    
     
     // Function to determine if plist is already populated
     func evaluatePlist(_ usernameValue:String) {
@@ -72,8 +73,8 @@ class ViewController: UIViewController {
         }
     }
     
-    // Function to read key/value pairs out of plist
-    func readPlist(_ key:Any) {
+    // Function to read email key/value pairs out of plist
+    func readPlistEmail(_ key:Any) {
         
         // Retrieve value
         SwiftyPlistManager.shared.getValue(for: key as! String, fromPlistWithName: dataPlistName) { (result, err) in
@@ -82,11 +83,61 @@ class ViewController: UIViewController {
                     print("-------------> The Value for Key '\(key)' does not exists.")
                     return
                 }
-                print("-------------> The Value for Key '\(key)' actually exists. It is: '\(result)'")
+                // print("-------------> The Value for Key '\(key)' actually exists. It is: '\(result)'")
+                usernameValue = result as! String
+                print("------------> The value for the fcmIdValue variable is \(usernameValue).")
             } else {
                 print("No key in there!")
             }
         }
+    }
+    
+    // Function to read fcmID key/value pairs out of plist
+    func readPlistFcm(_ key:Any) {
+        
+        // Retrieve value
+        SwiftyPlistManager.shared.getValue(for: key as! String, fromPlistWithName: dataPlistName) { (result, err) in
+            if err == nil {
+                guard let result = result else {
+                    print("-------------> The Value for Key '\(key)' does not exists.")
+                    return
+                }
+                // print("-------------> The Value for Key '\(key)' actually exists. It is: '\(result)'")
+                fcmIdValue = result as! String
+                print("------------> The value for the fcmIdValue variable is \(fcmIdValue).")
+            } else {
+                print("No key in there!")
+            }
+        }
+    }
+
+    // Function to post email and Firebase token to Sinatra app
+    func postData() {
+        var request = URLRequest(url: URL(string: "https://ios-post-proto-jv.herokuapp.com/post_id")!)  // test to Heroku-hosted app
+        
+        let email = usernameValue
+        let fcmID = fcmIdValue
+        
+        // let email = "jv-iphone@test.com"  // test from JV iPhone
+        
+        let postString = "email=\(email)&fcm_id=\(String(describing: fcmID))"
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(String(describing: responseString))")
+        }
+        task.resume()
     }
     
     override func didReceiveMemoryWarning() {
